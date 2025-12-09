@@ -18,28 +18,104 @@ async function consultarCNPJ() {
     }
     
     try {
+        // Mostrar carregamento
+        const consultarBtn = document.querySelector('button[onclick="consultarCNPJ()"]');
+        consultarBtn.innerHTML = '⏳ Consultando...';
+        consultarBtn.disabled = true;
+        
         const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
         
         if (!response.ok) {
-            throw new Error('CNPJ não encontrado');
+            throw new Error('CNPJ não encontrado na base de dados');
         }
         
         const empresa = await response.json();
         
-        // Preencher campos automaticamente
+        // ✅ CORREÇÃO AQUI: Preencher os campos CORRETOS
         document.getElementById('razaoSocialInput').value = empresa.razao_social || '';
         document.getElementById('cnpjInput').value = empresa.cnpj || cnpj;
-        document.getElementById('endereco').value = 
-            `${empresa.logradouro || ''} ${empresa.numero || ''}, ${empresa.bairro || ''} - ${empresa.municipio || ''}/${empresa.uf || ''}`.trim();
         
-        alert(`✅ Empresa encontrada: ${empresa.razao_social}`);
+        // Montar endereço completo
+        const endereco = [
+            empresa.logradouro,
+            empresa.numero,
+            empresa.complemento,
+            empresa.bairro,
+            empresa.municipio,
+            empresa.uf
+        ].filter(Boolean).join(', ');
+        
+        document.getElementById('endereco').value = endereco;
+        
+        // Preencher telefone se existir
+        if (empresa.ddd_telefone_1) {
+            document.getElementById('telefone').value = `(${empresa.ddd_telefone_1.substring(0,2)}) ${empresa.ddd_telefone_1.substring(2)}`;
+        }
+        
+        // Restaurar botão
+        consultarBtn.innerHTML = '🔍 Consultar CNPJ';
+        consultarBtn.disabled = false;
+        
+        // Mensagem de sucesso
+        alert(`✅ Empresa encontrada!\n${empresa.razao_social}\n${empresa.cnpj}`);
         
     } catch (error) {
-        alert('⚠️ CNPJ não encontrado na base. Preencha os dados manualmente.');
-        // Deixa os campos em branco para preenchimento manual
-        document.getElementById('cnpjInput').value = cnpjInput.value;
+        console.error('Erro na consulta:', error);
+        
+        // Restaurar botão
+        const consultarBtn = document.querySelector('button[onclick="consultarCNPJ()"]');
+        consultarBtn.innerHTML = '🔍 Consultar CNPJ';
+        consultarBtn.disabled = false;
+        
+        // Opção para preencher manualmente
+        const confirmar = confirm(
+            '⚠️ Não foi possível consultar automaticamente.\n' +
+            'Deseja preencher o CNPJ digitado no campo correspondente?'
+        );
+        
+        if (confirmar) {
+            document.getElementById('cnpjInput').value = cnpjInput.value;
+        }
     }
 }
+
+// Formatar CNPJ automaticamente
+document.getElementById('cnpj').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 14) value = value.substring(0, 14);
+    
+    if (value.length > 12) {
+        value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    } else if (value.length > 8) {
+        value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})/, '$1.$2.$3/$4');
+    } else if (value.length > 5) {
+        value = value.replace(/^(\d{2})(\d{3})(\d{3})/, '$1.$2.$3');
+    } else if (value.length > 2) {
+        value = value.replace(/^(\d{2})(\d{3})/, '$1.$2');
+    }
+    
+    e.target.value = value;
+});
+
+// Formatar telefone
+document.getElementById('telefone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 11) value = value.substring(0, 11);
+    
+    if (value.length > 10) {
+        value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 6) {
+        value = value.replace(/^(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else if (value.length > 2) {
+        value = value.replace(/^(\d{2})(\d{4})/, '($1) $2');
+    } else if (value.length > 0) {
+        value = value.replace(/^(\d{2})/, '($1)');
+    }
+    
+    e.target.value = value;
+});
 
 // 2. Carregar Catálogo (Google Sheets ou JSON local)
 async function carregarCatalogoGoogleSheets() {
