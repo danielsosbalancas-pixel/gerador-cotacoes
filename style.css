@@ -1,334 +1,423 @@
+/* ============================================
+   ESTILOS PARA COPIAR LAYOUT DO WORD GRASCON
+   ============================================ */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    min-height: 100vh;
-    padding: 20px;
+    font-family: 'Calibri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.4;
 }
 
-.container {
-    max-width: 1200px;
+/* Container principal */
+.container-fluid {
+    padding: 20px;
+    max-width: 1400px;
     margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    padding: 30px;
 }
 
-header {
-    text-align: center;
+/* Cabeçalho */
+.header-bar {
+    background: linear-gradient(135deg, #0066cc, #004d99);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 8px;
     margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #3498db;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-h1 {
+.header-bar h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.header-bar .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Formulários */
+.form-container {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    height: 100%;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.form-section h2 {
     color: #2c3e50;
-    margin-bottom: 10px;
-}
-
-.section {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 25px;
-    border-left: 4px solid #3498db;
-}
-
-h2 {
-    color: #2c3e50;
+    font-size: 1.4rem;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.input-group {
-    display: flex;
-    gap: 10px;
+.step {
+    background: #0066cc;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
+    justify-content: center;
+    font-size: 0.9rem;
 }
 
-input, select {
+/* Inputs e controles */
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-control, .form-select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
     padding: 10px 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    min-width: 200px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
 }
 
-input:focus, select:focus {
-    border-color: #3498db;
-    outline: none;
+.form-control:focus, .form-select:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* Preview do produto */
+.produto-preview {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.produto-preview.hidden {
+    display: none;
+}
+
+.produto-preview img {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Itens da cotação */
+.itens-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 10px;
+    background: #f8f9fa;
+}
+
+.item-cotacao {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.item-imagem {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-codigo {
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.item-descricao {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-quantidade {
+    width: 70px;
+    padding: 5px;
+    text-align: center;
+}
+
+.item-total {
+    font-weight: bold;
+    min-width: 100px;
+    text-align: right;
+}
+
+.total-container {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    text-align: right;
+}
+
+.total-container h4 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+/* Preview da cotação */
+.preview-container {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    height: 100%;
+}
+
+.preview-title {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #0066cc;
+}
+
+.cotacao-preview {
+    font-family: 'Calibri', Arial, sans-serif;
+    line-height: 1.5;
+}
+
+/* Template da cotação - ESTILO WORD */
+.cotacao-template {
+    background: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.cabecalho-cotacao {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #0066cc;
+}
+
+.cabecalho-cotacao h1 {
+    color: #0066cc;
+    font-size: 24pt;
+    margin-bottom: 5px;
+}
+
+.cabecalho-cotacao .cnpj {
+    font-size: 11pt;
+    color: #666;
+}
+
+/* Tabela no estilo Word */
+.tabela-word {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 10pt;
+}
+
+.tabela-word th {
+    background-color: #0066cc;
+    color: white;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #ddd;
+}
+
+.tabela-word td {
+    padding: 10px 8px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.tabela-word .col-descricao {
+    width: 50%;
+}
+
+.tabela-word .col-imagem {
+    width: 25%;
+    text-align: center;
+}
+
+.tabela-word .col-valores {
+    width: 25%;
+    text-align: right;
+}
+
+.imagem-produto {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: white;
+}
+
+/* Condições comerciais no estilo Word */
+.condicoes-comerciais {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-left: 4px solid #0066cc;
+}
+
+.condicoes-comerciais h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 12pt;
+}
+
+.condicoes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.condicao-item {
+    background: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.condicao-item strong {
+    color: #0066cc;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Botões de ação */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eaeaea;
 }
 
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 12px 24px;
     font-weight: 600;
+    border-radius: 6px;
     transition: all 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.btn:hover {
+.btn-primary {
+    background: linear-gradient(135deg, #0066cc, #0052a3);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0052a3, #003d7a);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 102, 204, 0.2);
 }
 
-.primary {
-    background: linear-gradient(135deg, #3498db, #2c3e50);
-    color: white;
+.btn-lg {
+    padding: 15px 30px;
+    font-size: 1.1rem;
 }
 
-.secondary {
-    background: #95a5a6;
-    color: white;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-}
-
-.table th {
-    background: #2c3e50;
-    color: white;
-    padding: 15px;
-    text-align: left;
-}
-
-.table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.table tfoot td {
-    background: #f8f9fa;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin: 30px 0;
-    flex-wrap: wrap;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.preview {
-    margin-top: 40px;
-    padding: 20px;
-    background: white;
-    border: 2px dashed #3498db;
-    border-radius: 10px;
-}
-
-.hidden {
-    display: none;
-}
-
-footer {
+/* Footer */
+.footer {
     text-align: center;
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid #ddd;
-    color: #7f8c8d;
-    font-size: 14px;
+    color: #666;
+    font-size: 0.9rem;
 }
 
-/* Responsivo */
+/* Responsividade */
 @media (max-width: 768px) {
-    .container {
+    .container-fluid {
+        padding: 10px;
+    }
+    
+    .header-bar {
+        padding: 20px;
+    }
+    
+    .header-bar h1 {
+        font-size: 2rem;
+    }
+    
+    .form-container, .preview-container {
         padding: 15px;
     }
     
-    .input-group {
+    .action-buttons {
         flex-direction: column;
-        align-items: stretch;
     }
     
-    input, select {
-        min-width: auto;
-        width: 100%;
+    .item-cotacao {
+        flex-direction: column;
+        align-items: flex-start;
     }
     
-    .grid {
-        grid-template-columns: 1fr;
+    .item-imagem {
+        margin-bottom: 10px;
     }
 }
 
-/* Logo SOS BALANÇAS */
-.logo h1 {
-    color: #2c3e50;
-    margin-bottom: 5px;
-    font-size: 2.5em;
+/* Utilitários */
+.hidden {
+    display: none !important;
 }
 
-.logo p {
-    color: #7f8c8d;
-    font-size: 1.1em;
-}
-
-.contato-header {
-    text-align: right;
-    color: #3498db;
-    font-weight: bold;
-}
-
-/* Layout para formulários */
-.grid-2-col {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.grid-3-col {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.grid-2-col label,
-.grid-3-col label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.grid-2-col input,
-.grid-3-col input,
-.grid-3-col select {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    .grid-2-col,
-    .grid-3-col {
-        grid-template-columns: 1fr;
-    }
-    
-    .contato-header {
-        text-align: center;
-        margin-top: 10px;
-    }
-}
-
-/* Estilos para a tabela de produtos */
-.item-cotacao {
-    transition: background-color 0.3s;
-}
-
-.item-cotacao:hover {
-    background-color: #f8f9fa;
-}
-
-.item-cotacao td {
-    vertical-align: middle;
-}
-
-.item-cotacao input[type="number"] {
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.text-center {
     text-align: center;
 }
 
-/* Mensagens de status */
-.success-message {
-    animation: fadeIn 0.5s;
+.text-right {
+    text-align: right;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Botão de remover */
-.btn[style*="background:#e74c3c"]:hover {
-    background: #c0392b !important;
-    transform: scale(1.05);
-}
-
-/* Estilos para imagens dos produtos */
-.product-image {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    margin-right: 10px;
-}
-
-.product-image-large {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-}
-
-/* Estilo para dropdown com imagens */
-select option {
-    padding: 8px !important;
-    height: auto !important;
-}
-
-/* Preview do produto */
-.product-preview {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin: 15px 0;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #3498db;
-}
-
-.product-preview img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.product-preview-info h4 {
-    margin: 0 0 5px 0;
-    color: #2c3e50;
-}
-
-.product-preview-info p {
-    margin: 0;
-    color: #7f8c8d;
-    font-size: 14px;
-}
+.mt-3 { margin-top: 15px; }
+.mb-3 { margin-bottom: 15px; }
+.mt-4 { margin-top: 20px; }
+.mb-4 { margin-bottom: 20px; }
