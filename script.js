@@ -43,40 +43,13 @@ async function consultarCNPJ() {
 }
 
 // 2. Carregar Catálogo (Google Sheets ou JSON local)
-async function carregarCatalogo() {
-    try {
-        // Catálogo local (você pode trocar por Google Sheets depois)
-        const catalogo = [
-            {
-                codigo: '2521',
-                descricao: 'BALANÇA MARCA RAMUZA - MODELO DP50P',
-                imagem: 'https://via.placeholder.com/150',
-                preco: 990.00,
-                especificacoes: 'Capacidade: 50kg, Divisão: 10g'
-            },
-            {
-                codigo: '6758',
-                descricao: 'BALANÇA MARCA UPX - MODELO BLUE UL',
-                imagem: 'https://via.placeholder.com/150',
-                preco: 1590.00,
-                especificacoes: 'Capacidade: 150kg, Plataforma Aço Inox'
-            }
-        ];
-        
-        const select = document.getElementById('produtoSelect');
-        select.innerHTML = '<option value="">Selecione um produto...</option>';
-        
-        catalogo.forEach(produto => {
-            const option = document.createElement('option');
-            option.value = produto.codigo;
-            option.textContent = `[${produto.codigo}] ${produto.descricao.substring(0, 50)}...`;
-            option.dataset.produto = JSON.stringify(produto);
-            select.appendChild(option);
-        });
-        
-    } catch (error) {
-        console.error('Erro ao carregar catálogo:', error);
-    }
+async function carregarCatalogoGoogleSheets() {
+    const sheetId = 'SUA_PLANILHA_ID'; // Pegue do link
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+    
+    const response = await fetch(url);
+    const text = await response.text();
+    // Processar o CSV
 }
 
 // 3. Adicionar Produto à Tabela
