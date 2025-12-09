@@ -8,7 +8,7 @@ const produtos = [
     {
         codigo: '2521',
         descricao: 'BALANÇA MARCA RAMUZA - MODELO DP50P TIPO PADEIRO - AÇO CARBONO - COM COLUNA',
-        imagem: 'https://drive.google.com/file/d/1xggXoN3r1PE_A5i2DMwYw5rLkZBMWpof/view?usp=share_link',
+        imagem: 'https://github.com/danielsosbalancas-pixel/gerador-cotacoes/blob/gerador-cotacoes/imagens/Captura%20de%20Tela%202025-12-07%20às%2008.31.38.png?raw=true',
         preco: 990.00,
         especificacoes: 'Capacidade: 50kg | Divisão: 10g | Plataforma Aço Carbono 33x28cm'
     },
