@@ -287,9 +287,9 @@ function gerarTemplateCotacao(dados) {
         <div class="cotacao-template">
             <!-- Cabeçalho -->
             <div class="cabecalho-cotacao">
-                <h1>LABORATÓRIOS GRASCON DO BRASIL</h1>
+                <h1>SOS BALANÇAS</h1>
                 <p class="cnpj">CNPJ: 03.670.008/0001-53</p>
-                <p>Contato: Elisangela Cardoso | E-mail: elisangela@grascon.com.br | Telefone: (11) 5677-5807</p>
+                <p>Contato:  | E-mail: | Telefone: </p>
             </div>
             
             <!-- Dados do Cliente -->
