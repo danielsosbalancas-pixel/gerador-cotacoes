@@ -3,19 +3,28 @@
 // VERSÃO SIMPLIFICADA E FUNCIONAL
 // ============================================
 
-// CATÁLOGO DE PRODUTOS
+// CATÁLOGO DE PRODUTOS COM IMAGENS
 const produtos = [
     {
         codigo: '2521',
         descricao: 'BALANÇA MARCA RAMUZA - MODELO DP50P TIPO PADEIRO - AÇO CARBONO - COM COLUNA',
+        imagem: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=150&h=150&fit=crop',
         preco: 990.00,
         especificacoes: 'Capacidade: 50kg | Divisão: 10g | Plataforma Aço Carbono 33x28cm'
     },
     {
         codigo: '6758',
         descricao: 'BALANÇA MARCA UPX - MODELO BLUE UL - COM BATERIA',
+        imagem: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=150&h=150&fit=crop&grayscale',
         preco: 1590.00,
         especificacoes: 'Capacidade: 150kg | Divisão: 20g/50g | Plataforma Aço Inox 45x60cm'
+    },
+    {
+        codigo: '7890',
+        descricao: 'BALANÇA DIGITAL PRECISÃO 30KG',
+        imagem: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=150&h=150&fit=crop',
+        preco: 750.00,
+        especificacoes: 'Capacidade: 30kg | Divisão: 1g | Display LCD | Bateria Recarregável'
     }
 ];
 
@@ -26,41 +35,40 @@ const produtos = [
 function carregarCatalogo() {
     console.log('🔧 Função carregarCatalogo() chamada');
     
-    // Encontrar o elemento select
     const select = document.getElementById('produtoSelect');
-    console.log('Elemento select:', select);
     
     if (!select) {
         alert('❌ ERRO: Elemento #produtoSelect não encontrado!');
         return;
     }
     
-    // Limpar opções existentes (mantendo apenas a primeira)
+    // Limpar opções existentes
     select.innerHTML = '<option value="">Selecione um produto...</option>';
     
-    // Adicionar cada produto
+    // Adicionar cada produto com mini preview
     produtos.forEach(produto => {
         const option = document.createElement('option');
         option.value = produto.codigo;
-        option.textContent = `${produto.codigo} - R$ ${produto.preco.toFixed(2)}`;
-        option.title = produto.descricao; // Tooltip com descrição completa
+        
+        // Criar conteúdo com ícone de imagem
+        option.innerHTML = `
+            <div style="display: flex; align-items: center; padding: 5px 0;">
+                <img src="${produto.imagem}" 
+                     style="width: 30px; height: 30px; border-radius: 4px; margin-right: 10px; object-fit: cover; border: 1px solid #ddd;">
+                <div>
+                    <strong>${produto.codigo}</strong> - R$ ${produto.preco.toFixed(2)}
+                    <div style="font-size: 11px; color: #666; margin-top: 2px;">
+                        ${produto.descricao.substring(0, 40)}...
+                    </div>
+                </div>
+            </div>
+        `;
+        
         option.dataset.produto = JSON.stringify(produto);
         select.appendChild(option);
     });
     
     console.log(`✅ ${produtos.length} produtos carregados`);
-    
-    // Mostrar mensagem de sucesso
-    const mensagem = document.createElement('div');
-    mensagem.style.cssText = 'background: #2ecc71; color: white; padding: 10px; margin-top: 10px; border-radius: 5px;';
-    mensagem.textContent = `✅ ${produtos.length} produtos carregados no catálogo`;
-    
-    // Remover mensagem anterior se existir
-    const msgAnterior = document.querySelector('.msg-catalogo');
-    if (msgAnterior) msgAnterior.remove();
-    
-    mensagem.className = 'msg-catalogo';
-    select.parentNode.appendChild(mensagem);
 }
 
 // ============================================
@@ -117,6 +125,79 @@ function carregarProduto() {
         <td class="item-total">R$ ${produto.preco.toFixed(2).replace('.', ',')}</td>
         <td>
             <button onclick="removerLinha(this)" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">
+                🗑️
+            </button>
+        </td>
+    `;
+    
+    tabela.appendChild(novaLinha);
+    calcularTotalGeral();
+    
+    // Resetar seleção
+    select.selectedIndex = 0;
+    
+    console.log('✅ Produto adicionado com sucesso');
+}
+
+function carregarProduto() {
+    console.log('📦 Adicionando produto...');
+    
+    const select = document.getElementById('produtoSelect');
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (!selectedOption.value) {
+        console.log('Nenhum produto selecionado');
+        return;
+    }
+    
+    const produto = JSON.parse(selectedOption.dataset.produto);
+    console.log('Produto selecionado:', produto.codigo);
+    
+    const tabela = document.getElementById('itensCorpo');
+    
+    if (!tabela) {
+        alert('Erro: Tabela não encontrada');
+        return;
+    }
+    
+    // Verificar se produto já foi adicionado
+    const linhas = tabela.getElementsByTagName('tr');
+    for (let linha of linhas) {
+        const codigoCell = linha.cells[0];
+        if (codigoCell && codigoCell.textContent === produto.codigo) {
+            alert('⚠️ Este produto já foi adicionado à cotação!');
+            return;
+        }
+    }
+    
+    // Criar nova linha na tabela COM IMAGEM
+    const novaLinha = document.createElement('tr');
+    novaLinha.innerHTML = `
+        <td style="vertical-align: middle;">
+            <div style="display: flex; align-items: center;">
+                <img src="${produto.imagem}" 
+                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 8px; border: 1px solid #ddd;">
+                <strong>${produto.codigo}</strong>
+            </div>
+        </td>
+        <td style="vertical-align: middle;">
+            <strong>${produto.descricao}</strong><br>
+            <small style="color:#666">${produto.especificacoes}</small>
+        </td>
+        <td style="vertical-align: middle;">
+            <input type="number" value="1" min="1" 
+                   style="width: 60px; padding: 5px;"
+                   onchange="atualizarValorTotal(this)">
+        </td>
+        <td class="preco-unitario" style="vertical-align: middle;">
+            R$ ${produto.preco.toFixed(2).replace('.', ',')}
+        </td>
+        <td class="item-total" style="vertical-align: middle;">
+            R$ ${produto.preco.toFixed(2).replace('.', ',')}
+        </td>
+        <td style="vertical-align: middle;">
+            <button onclick="removerLinha(this)" 
+                    style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">
                 🗑️
             </button>
         </td>
