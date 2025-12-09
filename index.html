@@ -54,6 +54,43 @@
     </div>
 </section>
 
+    <!-- Seção Produtos -->
+<section class="section">
+    <h2>2. Adicionar Produtos</h2>
+    <div class="input-group">
+        <label for="produtoSelect">Produto:</label>
+        <select id="produtoSelect" onchange="carregarProduto()">
+            <option value="">Selecione um produto...</option>
+            <!-- Os produtos serão inseridos aqui via JavaScript -->
+        </select>
+        <button onclick="carregarCatalogo()" class="btn">🔄 Atualizar Catálogo</button>
+    </div>
+
+    <!-- Tabela de Itens -->
+    <table id="tabelaItens" class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Valor Unit.</th>
+                <th>Total</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody id="itensCorpo">
+            <!-- Itens serão inseridos aqui dinamicamente -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>Total Geral:</strong></td>
+                <td id="totalGeral">R$ 0,00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</section>
+        
             <!-- Tabela de Itens -->
             <table id="tabelaItens" class="table">
                 <thead>
