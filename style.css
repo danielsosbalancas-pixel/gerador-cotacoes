@@ -179,3 +179,67 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* Logo SOS BALANÇAS */
+.logo h1 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 2.5em;
+}
+
+.logo p {
+    color: #7f8c8d;
+    font-size: 1.1em;
+}
+
+.contato-header {
+    text-align: right;
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Layout para formulários */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.grid-2-col label,
+.grid-3-col label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.grid-2-col input,
+.grid-3-col input,
+.grid-3-col select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .grid-2-col,
+    .grid-3-col {
+        grid-template-columns: 1fr;
+    }
+    
+    .contato-header {
+        text-align: center;
+        margin-top: 10px;
+    }
+}
