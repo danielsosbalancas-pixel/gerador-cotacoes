@@ -118,64 +118,220 @@ document.getElementById('telefone').addEventListener('input', function(e) {
 });
 
 // 2. Carregar Catálogo (Google Sheets ou JSON local)
-async function carregarCatalogoGoogleSheets() {
-    const sheetId = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTzTURqk6e4HHCA5ThyNkHyi-8bZppYU4DZ8HlkVaCMn2EnnuGcQlmm7xkyR_uPW4gXznCAwMnRWY3s/pubhtml'; // Pegue do link
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+// CATÁLOGO DE PRODUTOS SOS BALANÇAS - COM IMAGENS
+const catalogo = [
+    {
+        codigo: '2521',
+        descricao: 'BALANÇA MARCA RAMUZA - MODELO DP50P TIPO PADEIRO - AÇO CARBONO - COM COLUNA',
+        imagem: 'https://via.placeholder.com/150x150/3498db/ffffff?text=BALANÇA+2521',
+        preco: 990.00,
+        especificacoes: 'Capacidade: 50kg | Divisão: 10g | Plataforma Aço Carbono 33x28cm | Com Certificado de Calibração'
+    },
+    {
+        codigo: '6758',
+        descricao: 'BALANÇA MARCA UPX - MODELO BLUE UL - COM BATERIA',
+        imagem: 'https://via.placeholder.com/150x150/2ecc71/ffffff?text=BALANÇA+6758',
+        preco: 1590.00,
+        especificacoes: 'Capacidade: 150kg | Divisão: 20g (0-60kg) / 50g (61-150kg) | Plataforma Aço Inox 45x60cm | Com Bateria'
+    },
+    {
+        codigo: '7890',
+        descricao: 'BALANÇA DIGITAL PRECISÃO 30KG',
+        imagem: 'https://via.placeholder.com/150x150/e74c3c/ffffff?text=BALANÇA+7890',
+        preco: 750.00,
+        especificacoes: 'Capacidade: 30kg | Divisão: 1g | Display LCD | Bateria Recarregável'
+    }
+];
+
+// FUNÇÃO PRINCIPAL PARA CARREGAR CATÁLOGO
+function carregarCatalogo() {
+    console.log('🚀 Iniciando carregamento do catálogo...');
     
-    const response = await fetch(url);
-    const text = await response.text();
-    // Processar o CSV
+    try {
+        const select = document.getElementById('produtoSelect');
+        
+        if (!select) {
+            console.error('❌ ERRO: Elemento #produtoSelect não encontrado!');
+            alert('Erro: Elemento de seleção de produtos não encontrado.');
+            return;
+        }
+        
+        console.log('✅ Elemento select encontrado:', select);
+        
+        // Limpa todas as opções exceto a primeira
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        
+        // Adiciona cada produto do catálogo
+        catalogo.forEach((produto, index) => {
+            const option = document.createElement('option');
+            option.value = produto.codigo;
+            option.textContent = `[${produto.codigo}] ${produto.descricao.substring(0, 50)}${produto.descricao.length > 50 ? '...' : ''}`;
+            option.dataset.produto = JSON.stringify(produto);
+            select.appendChild(option);
+            
+            console.log(`✅ Produto ${index + 1} adicionado: ${produto.codigo}`);
+        });
+        
+        console.log(`🎉 Catálogo carregado com sucesso! ${catalogo.length} produtos disponíveis.`);
+        
+        // Mostrar mensagem para usuário
+        const mensagem = document.createElement('div');
+        mensagem.className = 'success-message';
+        mensagem.innerHTML = `✅ Catálogo carregado: ${catalogo.length} produtos disponíveis`;
+        mensagem.style.cssText = 'background:#2ecc71;color:white;padding:10px;border-radius:5px;margin-top:10px;';
+        
+        // Remove mensagem anterior se existir
+        const msgAnterior = document.querySelector('.success-message');
+        if (msgAnterior) msgAnterior.remove();
+        
+        // Insere após o botão
+        const botao = document.querySelector('button[onclick="carregarCatalogo()"]');
+        if (botao) {
+            botao.parentNode.appendChild(mensagem);
+        }
+        
+    } catch (error) {
+        console.error('❌ ERRO CRÍTICO ao carregar catálogo:', error);
+        alert(`Erro ao carregar catálogo: ${error.message}\nVerifique o console (F12) para mais detalhes.`);
+    }
 }
 
-// 3. Adicionar Produto à Tabela
+// FUNÇÃO PARA ADICIONAR PRODUTO À COTAÇÃO
 function carregarProduto() {
-    const select = document.getElementById('produtoSelect');
-    const produtoData = select.options[select.selectedIndex].dataset.produto;
+    console.log('📦 Adicionando produto à cotação...');
     
-    if (!produtoData) return;
-    
-    const produto = JSON.parse(produtoData);
-    const tabela = document.getElementById('itensCorpo');
-    
-    const novaLinha = document.createElement('tr');
-    novaLinha.innerHTML = `
-        <td>${produto.codigo}</td>
-        <td>${produto.descricao}</td>
-        <td><input type="number" value="1" min="1" onchange="atualizarTotal(this)"></td>
-        <td>R$ ${produto.preco.toFixed(2)}</td>
-        <td class="item-total">R$ ${produto.preco.toFixed(2)}</td>
-        <td><button onclick="removerItem(this)" class="btn" style="background:#e74c3c;">❌</button></td>
-    `;
-    
-    tabela.appendChild(novaLinha);
-    calcularTotal();
-}
-
-// 4. Cálculos
+    try {
+        const select = document.getElementById('produtoSelect');
+        const selectedOption = select.options[select.selectedIndex];
+        
+        if (!selectedOption.value) {
+            console.log('⚠️ Nenhum produto selecionado');
+            return;
+        }
+        
+        const produto = JSON.parse(selectedOption.dataset.produto);
+        console.log('✅ Produto selecionado:', produto.codigo);
+        
+        const tabela = document.getElementById('itensCorpo');
+        
+        if (!tabela) {
+            console.error('❌ ERRO: Tabela de itens não encontrada!');
+            return;
+        }
+        
+        // Verifica se produto já está na tabela
+        const produtosExistentes = Array.from(tabela.querySelectorAll('tr')).map(tr => 
+            tr.querySelector('td:first-child')?.textContent
+        );
+        
+        if (produtosExistentes.includes(produto.codigo)) {
+            alert('Este produto já foi adicionado à cotação!');
+            return;
+        }
+        
+        // Cria nova linha na tabela
+        const novaLinha = document.createElement('tr');
+        novaLinha.className = 'item-cotacao';
+        novaLinha.innerHTML = `
+            <td>${produto.codigo}</td>
+            <td>
+                <strong>${produto.descricao}</strong><br>
+                <small style="color:#7f8c8d;">${produto.especificacoes}</small>
+            </td>
+            <td>
+                <input type="number" value="1" min="1" max="100" 
+                       onchange="atualizarTotal(this)" 
+                       style="width: 60px; padding: 5px;">
+            </td>
+            <td class="preco-unitario">R$ ${produto.preco.toFixed(2)}</td>
+            <td class="item-total">R$ ${produto.preco.toFixed(2)}</td>
+            <td>
+                <button onclick="removerItem(this)" class="btn" 
+                        style="background:#e74c3c; color:white; padding:5px 10px;">
+                    🗑️ Remover
+                </button>
+            </td>
+        `;
+        
+        tabela.appendChild(novaLinha);
+        console.log('✅ Produto adicionado à tabela');
+        
+// FUNÇÃO PARA CALCULAR TOTAL DA COTAÇÃO
 function calcularTotal() {
-    let total = 0;
-    document.querySelectorAll('.item-total').forEach(celula => {
-        const valor = parseFloat(celula.textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        total += isNaN(valor) ? 0 : valor;
-    });
+    console.log('🧮 Calculando total...');
     
-    document.getElementById('totalGeral').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    try {
+        let total = 0;
+        const itensTotais = document.querySelectorAll('.item-total');
+        
+        itensTotais.forEach(celula => {
+            const texto = celula.textContent.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
+            const valor = parseFloat(texto);
+            
+            if (!isNaN(valor)) {
+                total += valor;
+            }
+        });
+        
+        const totalElement = document.getElementById('totalGeral');
+        if (totalElement) {
+            totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            console.log('✅ Total calculado:', total);
+        }
+        
+    } catch (error) {
+        console.error('❌ Erro ao calcular total:', error);
+    }
 }
 
+// ATUALIZAR TOTAL QUANDO QUANTIDADE MUDAR
 function atualizarTotal(input) {
     const linha = input.closest('tr');
-    const precoUnitario = parseFloat(linha.cells[3].textContent.replace('R$ ', '').replace(',', '.'));
+    const precoTexto = linha.querySelector('.preco-unitario').textContent;
+    const preco = parseFloat(precoTexto.replace('R$ ', '').replace(',', '.'));
     const quantidade = parseInt(input.value) || 1;
-    const total = precoUnitario * quantidade;
+    const total = preco * quantidade;
     
-    linha.cells[4].textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    linha.querySelector('.item-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
     calcularTotal();
 }
 
+// REMOVER ITEM DA COTAÇÃO
 function removerItem(botao) {
-    botao.closest('tr').remove();
-    calcularTotal();
+    if (confirm('Tem certeza que deseja remover este item da cotação?')) {
+        const linha = botao.closest('tr');
+        linha.remove();
+        calcularTotal();
+        console.log('🗑️ Item removido da cotação');
+    }
 }
+
+// CARREGAR CATÁLOGO QUANDO PÁGINA ABRIR
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 Página carregada, iniciando sistema...');
+    
+    // Mostrar URL do site
+    const siteUrl = window.location.origin;
+    const urlElement = document.getElementById('siteUrl');
+    if (urlElement) {
+        urlElement.textContent = siteUrl;
+    }
+    
+    // Carregar catálogo automaticamente após 1 segundo
+    setTimeout(() => {
+        console.log('⏰ Carregando catálogo automaticamente...');
+        carregarCatalogo();
+    }, 1000);
+    
+    // Adicionar evento para tecla Enter no campo CNPJ
+    document.getElementById('cnpj').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            consultarCNPJ();
+        }
+    });
+});
 
 // 5. Gerar PDF
 function gerarPDF() {
