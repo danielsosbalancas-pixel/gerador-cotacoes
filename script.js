@@ -26,25 +26,24 @@ async function consultarCNPJ() {
         
         const empresa = await response.json();
         
-        // Preencher dados
-        document.getElementById('razaoSocial').textContent = empresa.razao_social;
-        document.getElementById('telefoneEmpresa').textContent = empresa.ddd_telefone_1 || '(11) 5677-5807';
+        // Preencher campos automaticamente
+        document.getElementById('razaoSocialInput').value = empresa.razao_social || '';
+        document.getElementById('cnpjInput').value = empresa.cnpj || cnpj;
+        document.getElementById('endereco').value = 
+            `${empresa.logradouro || ''} ${empresa.numero || ''}, ${empresa.bairro || ''} - ${empresa.municipio || ''}/${empresa.uf || ''}`.trim();
         
-        // Mostrar seção
-        document.getElementById('dadosEmpresa').classList.remove('hidden');
-        
-        alert(`Empresa encontrada: ${empresa.razao_social}`);
+        alert(`✅ Empresa encontrada: ${empresa.razao_social}`);
         
     } catch (error) {
-        alert('Erro ao consultar CNPJ: ' + error.message);
-        // Preencher com dados padrão
-        document.getElementById('dadosEmpresa').classList.remove('hidden');
+        alert('⚠️ CNPJ não encontrado na base. Preencha os dados manualmente.');
+        // Deixa os campos em branco para preenchimento manual
+        document.getElementById('cnpjInput').value = cnpjInput.value;
     }
 }
 
 // 2. Carregar Catálogo (Google Sheets ou JSON local)
 async function carregarCatalogoGoogleSheets() {
-    const sheetId = 'SUA_PLANILHA_ID'; // Pegue do link
+    const sheetId = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTzTURqk6e4HHCA5ThyNkHyi-8bZppYU4DZ8HlkVaCMn2EnnuGcQlmm7xkyR_uPW4gXznCAwMnRWY3s/pubhtml'; // Pegue do link
     const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
     
     const response = await fetch(url);
@@ -107,23 +106,53 @@ function gerarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     
-    // Conteúdo básico do PDF
+    // Cabeçalho
     doc.setFontSize(20);
-    doc.text('COTAÇÃO - LABORATÓRIOS GRASCON', 105, 20, { align: 'center' });
-    
+    doc.setTextColor(0, 100, 0); // Verde
+    doc.text('⚖️ SOS BALANÇAS', 105, 20, { align: 'center' });
     doc.setFontSize(12);
-    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 20, 40);
-    doc.text(`CNPJ: ${document.getElementById('cnpj').value || 'Não informado'}`, 20, 50);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Soluções em Pesagem e Instrumentação', 105, 27, { align: 'center' });
     
-    // Tabela de itens
-    let yPos = 80;
-    doc.text('ITENS DA COTAÇÃO:', 20, yPos);
-    yPos += 10;
+    // Dados da Empresa Cliente
+    doc.setFontSize(14);
+    doc.text('DADOS DO CLIENTE', 20, 45);
+    doc.setFontSize(11);
+    doc.text(`Razão Social: ${document.getElementById('razaoSocialInput').value || 'Não informado'}`, 20, 55);
+    doc.text(`CNPJ: ${document.getElementById('cnpjInput').value || 'Não informado'}`, 20, 62);
+    doc.text(`Endereço: ${document.getElementById('endereco').value || 'Não informado'}`, 20, 69);
+    doc.text(`Contato: ${document.getElementById('contato').value || 'Não informado'}`, 20, 76);
+    doc.text(`Telefone: ${document.getElementById('telefone').value || 'Não informado'}`, 20, 83);
+    doc.text(`E-mail: ${document.getElementById('email').value || 'Não informado'}`, 20, 90);
     
-    // Adicione mais conteúdo conforme necessário
+    // Linha divisória
+    doc.line(20, 95, 190, 95);
+    
+    // Título dos Itens
+    doc.setFontSize(14);
+    doc.text('ITENS DA COTAÇÃO', 20, 105);
+    
+    // Cabeçalho da tabela
+    doc.setFillColor(44, 62, 80); // Azul escuro
+    doc.rect(20, 110, 170, 8, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.text('Código', 25, 116);
+    doc.text('Descrição', 50, 116);
+    doc.text('Qtd', 130, 116);
+    doc.text('Valor Unit.', 145, 116);
+    doc.text('Total', 170, 116);
+    
+    // ... continue com o restante da função
+    
+    // Adicione as condições comerciais com frete
+    doc.text(`Frete: ${document.getElementById('frete').value}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Garantia: ${document.getElementById('garantia').value}`, 20, yPos);
+    yPos += 7;
+    doc.text(`Validade: ${document.getElementById('validade').value}`, 20, yPos);
     
     // Salvar PDF
-    doc.save(`cotacao-grascon-${Date.now()}.pdf`);
+    doc.save(`cotacao-sos-balanças-${Date.now()}.pdf`);
 }
 
 // 6. Limpar Tudo
