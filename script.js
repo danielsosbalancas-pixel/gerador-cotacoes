@@ -288,8 +288,8 @@ function gerarTemplateCotacao(dados) {
             <!-- Cabeçalho -->
             <div class="cabecalho-cotacao">
                 <h1>SOS BALANÇAS</h1>
-                <p class="cnpj">CNPJ: 03.670.008/0001-53</p>
-                <p>Contato:  | E-mail: | Telefone: </p>
+                <p class="cnpj">CNPJ: 34.721.020/0001-73</p>
+                <p> E-mail: contato@sosbalanca.com.br | Telefone: (11) 2082-0328</p>
             </div>
             
             <!-- Dados do Cliente -->
